@@ -1,4 +1,4 @@
-Crunchbase frofor Windows Phone
+Crunchbase for Windows Phone
 ========================
 
 Unofficial Windows Phone client for crunchbase.com.
