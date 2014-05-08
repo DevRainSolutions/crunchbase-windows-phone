@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application x:Class="DevRainSolutions.TechCompanies.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:core="clr-namespace:DevRainSolutions.TechCompanies.Core;assembly=DevRainSolutions.TechCompanies.Core"
+             xmlns:viewModel="clr-namespace:DevRainSolutions.TechCompanies.ViewModel"
+             mc:Ignorable="d">
+    <!--Application Resources-->
+    <Application.Resources>
+        <ResourceDictionary>
+            <viewModel:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
+            <viewModel:LocalizedStrings x:Key="LocalizedStrings" />
+            <core:EmptyStringToVisibleConverter x:Key="EmptyStringToVisibleConverter" />
+            <core:NamespaceToImageConverter x:Key="NamespaceToImageConverter" />
+            <!--<local:NamespaceToVisiableConverter x:Key="NamespaceToVisiableConverter" />-->
+            <core:DayConverter x:Key="DayConverter" />
+            <core:ToLowerConverter x:Key="ToLowerConverter" />
+            <core:ToUpperConverter x:Key="ToUpperConverter"  />
+            <core:EmptyStringToNAConverter x:Key="EmptyStringToNAConverter"  />
+            <core:PreviewConverter x:Key="PreviewConverter"  />
+            <core:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
+            <core:OppositeBoolToOpacityConverter x:Key="OppositeBoolToOpacityConverter" />
+            <core:ToLocalDateTimeStringConverter x:Key="ToLocalDateTimeStringConverter"  />
+            <core:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <core:OppositeBoolToVisibilityConverter x:Key="OppositeBoolToVisibilityConverter" />
+            <core:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+
+            <Style TargetType="StackPanel" x:Key="FeaturesItemPanelStyle">
+                <Setter Property="Width" Value="400" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="Margin" Value="0,20,0,0" />
+            </Style>
+
+            <Style TargetType="TextBlock" x:Key="SubHeader" BasedOn="{StaticResource PhoneTextTitle2Style}">
+                <Setter Property="FontSize" Value="36" />
+                <Setter Property="Margin" Value="0" />
+            </Style>
+
+            <ResourceDictionary.MergedDictionaries></ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+    <Application.ApplicationLifetimeObjects>
+        <!--Required object that handles lifetime events for the application-->
+        <shell:PhoneApplicationService Launching="Application_Launching" Closing="Application_Closing" Activated="Application_Activated" Deactivated="Application_Deactivated" />
+    </Application.ApplicationLifetimeObjects>
+</Application>

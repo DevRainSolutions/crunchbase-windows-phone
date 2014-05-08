@@ -1,0 +1,137 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="DevRainSolutions.TechCompanies.Pages.Search"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:telerikPrimitives="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
+    xmlns:telerik="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Core"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:command="clr-namespace:Phone7.Fx.Triggers;assembly=Phone7.Fx"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:adduplex="clr-namespace:AdDuplex;assembly=AdDuplex.WindowsPhone"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
+    DataContext="{Binding Main, Source={StaticResource Locator}}"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="ContentPanel" Grid.Row="0" Margin="12,17,12,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="ApplicationTitle" Text="SEARCH" 
+                   FontWeight="Bold"
+                   Grid.Row="0"
+                   Style="{StaticResource PhoneTextNormalStyle}"/>
+
+                <TextBox Grid.Row="1" 
+                         TextChanged="OnTextBoxTextChanged"
+                         Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=Explicit}" >
+
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="KeyDown">
+                            <command:EventToCommand Command="{Binding SearchButtonCommand, Mode=OneTime}"   
+                                                    PassEventArgsToCommand="True"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+                <controls:Pivot
+                    Margin="-12, -12, -12, 0"
+                    Grid.Row="2"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}">
+                    <controls:PivotItem Header="companies" >
+                        <telerikPrimitives:RadDataBoundListBox Grid.Row="1" EmptyContent="No search results"                                                            
+                         ItemsSource="{Binding SearchResultsCompanies}" telerik:InteractionEffectManager.IsInteractionEnabled="True">
+                            <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0, 12, 0, 12">
+                                        <TextBlock Text="{Binding Name}"  Style="{StaticResource PhoneTextLargeStyle}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <command:EventToCommand Command="{Binding CompanySelectionChanged, Mode=OneTime}"   
+														PassEventArgsToCommand="True"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </telerikPrimitives:RadDataBoundListBox>
+                    </controls:PivotItem>
+                    <controls:PivotItem Header="products" >
+                        <telerikPrimitives:RadDataBoundListBox Grid.Row="1" EmptyContent="No search results"                                                            
+                         ItemsSource="{Binding SearchResultsProducts}" telerik:InteractionEffectManager.IsInteractionEnabled="True">
+                            <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0, 12, 0, 12">
+                                        <TextBlock Text="{Binding Name}"  Style="{StaticResource PhoneTextLargeStyle}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <command:EventToCommand Command="{Binding CompanySelectionChanged, Mode=OneTime}"   
+														PassEventArgsToCommand="True"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </telerikPrimitives:RadDataBoundListBox>
+                    </controls:PivotItem>
+                    <controls:PivotItem Header="persons" >
+                        <telerikPrimitives:RadDataBoundListBox Grid.Row="1" EmptyContent="No search results"                                                            
+                         ItemsSource="{Binding SearchResultsPersons}" telerik:InteractionEffectManager.IsInteractionEnabled="True">
+                            <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0, 12, 0, 12">
+                                        <TextBlock Text="{Binding namespace}"
+                                                   FontSize="16"
+                                                   Margin="12,0,0,-6"
+                                                   Style="{StaticResource PhoneTextAccentStyle}" />
+                                        <TextBlock Text="{Binding Name}"  Style="{StaticResource PhoneTextLargeStyle}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <command:EventToCommand Command="{Binding CompanySelectionChanged, Mode=OneTime}"   
+														PassEventArgsToCommand="True"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </telerikPrimitives:RadDataBoundListBox>
+                    </controls:PivotItem>
+                </controls:Pivot>
+            </Grid>
+        </Grid>
+
+        <adduplex:AdControl Grid.Row="1" x:Name="adDuplexAd" AppId="36863" />
+
+        <telerikPrimitives:RadBusyIndicator IsRunning="{Binding IsBusy}" Background="#15dfdfdf" Content="Loading..." Grid.RowSpan="2" AnimationStyle="AnimationStyle9"/>
+    </Grid>
+
+
+    <!--Sample code showing usage of ApplicationBar-->
+    <!--<phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button1.png" Text="Button 1"/>
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button2.png" Text="Button 2"/>
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="MenuItem 1"/>
+                <shell:ApplicationBarMenuItem Text="MenuItem 2"/>
+            </shell:ApplicationBar.MenuItems>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>-->
+
+</phone:PhoneApplicationPage>

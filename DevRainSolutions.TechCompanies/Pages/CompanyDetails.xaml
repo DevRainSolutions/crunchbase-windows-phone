@@ -1,0 +1,524 @@
+﻿<phone:PhoneApplicationPage
+    xmlns:map="clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps"  
+    x:Class="DevRainSolutions.TechCompanies.Pages.CompanyDetails"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:telerikPrimitives="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
+    xmlns:telerikDataControls="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Data"
+    xmlns:telerikData="clr-namespace:Telerik.Windows.Data;assembly=Telerik.Windows.Data"
+    xmlns:telerik="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Core" 
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800" 
+    xmlns:adduplex="clr-namespace:AdDuplex;assembly=AdDuplex.WindowsPhone"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    DataContext="{Binding Main, Source={StaticResource Locator}}"
+    shell:SystemTray.IsVisible="False"
+    BackKeyPress="BackKeyPress">
+    
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <telerikPrimitives:RadBusyIndicator  VerticalAlignment="Top"  Margin="0,5,0,0"  IsRunning="{Binding IsBusy}" AnimationStyle="{Binding BusyIndicatorAnimationStyle}" Content="{Binding Path=LocalizedResources.App_BusyIndicatorText, Source={StaticResource LocalizedStrings}}"/>
+
+        <!--Pivot Control-->
+        <controls:Pivot Name="mainPivot" 
+                        Grid.Row="0"
+                        Title="{Binding Name, Converter={StaticResource ToUpperConverter}}" DataContext="{Binding SelectedObject}">
+            <controls:PivotItem Header="info" x:Name="piInfo" Margin="24,0,12,12" >
+                <ScrollViewer >
+                    <StackPanel>
+
+                        <Image x:Name="personImage" Source="{Binding ImageUrl}" 
+		                            Stretch="Uniform" HorizontalAlignment="Left" MaxHeight="200" />
+
+                        <TextBlock Text="{Binding IPO}" Visibility="{Binding IPO, Converter={StaticResource EmptyStringToVisibleConverter}}"
+                                                   FontSize="16" Margin="0" Style="{StaticResource PhoneTextAccentStyle}" />
+
+                        <StackPanel Visibility="{Binding homepage_url, Converter={StaticResource EmptyStringToVisibleConverter}}">
+                            <TextBlock Style="{StaticResource SubHeader}" Text="website" />
+                            <TextBlock Foreground="{StaticResource PhoneAccentBrush}" 
+                                       Text="{Binding homepage_url}"
+                                       Margin="0,0,0,24"
+                                       />
+                        </StackPanel>
+
+                        <StackPanel Visibility="{Binding email_address, Converter={StaticResource EmptyStringToVisibleConverter}}">
+                            <TextBlock Style="{StaticResource SubHeader}" Text="email" />
+                            <TextBlock Foreground="{StaticResource PhoneAccentBrush}" 
+                                       Text="{Binding email_address}" Margin="0,0,0,24" />
+                        </StackPanel>
+
+                        <StackPanel Visibility="{Binding blog_url, Converter={StaticResource EmptyStringToVisibleConverter}}">
+                            <TextBlock Text="blog" Style="{StaticResource SubHeader}" />
+                            <TextBlock Foreground="{StaticResource PhoneAccentBrush}" 
+                                       Text="{Binding blog_url}" Margin="0,0,0,24"
+                                        />
+                        </StackPanel>
+
+                        <StackPanel Visibility="{Binding twitter_username, Converter={StaticResource EmptyStringToVisibleConverter}}">
+                            <TextBlock Text="twitter" Style="{StaticResource SubHeader}"  />
+                            <TextBlock Foreground="{StaticResource PhoneAccentBrush}"  
+                                           Text="{Binding twitter_username}" Margin="0,0,0,24" />
+                        </StackPanel>
+
+                        <StackPanel Visibility="{Binding category_code, Converter={StaticResource EmptyStringToVisibleConverter}}" >
+                            <TextBlock Style="{StaticResource SubHeader}" Text="category" />
+                            <TextBlock Foreground="{StaticResource PhoneAccentBrush}" 
+                                       Text="{Binding category_code}" Margin="0,0,0,24" />
+                        </StackPanel>
+
+                        <StackPanel Visibility="{Binding phone_number, Converter={StaticResource EmptyStringToVisibleConverter}}">
+
+                            <TextBlock Text="mobile" Style="{StaticResource SubHeader}" />
+                            <TextBlock Foreground="{StaticResource PhoneAccentBrush}" 
+                                       Margin="0,0,0,24"
+                                       Text="{Binding phone_number, Converter={StaticResource EmptyStringToVisibleConverter}}" />
+
+                        </StackPanel>
+
+                        <StackPanel Visibility="{Binding number_of_employees, Converter={StaticResource EmptyStringToVisibleConverter}}">
+                            <TextBlock Text="employees count" Style="{StaticResource SubHeader}" />
+                            <TextBlock Foreground="{StaticResource PhoneAccentBrush}" 
+                                       Margin="0,0,0,24"
+                                       Text="{Binding number_of_employees, Converter={StaticResource EmptyStringToNAConverter}}" />
+                        </StackPanel>
+
+                        <StackPanel Visibility="{Binding Founded, Converter={StaticResource EmptyStringToVisibleConverter}}">
+                            <TextBlock Text="founded" Style="{StaticResource SubHeader}" />
+                            <TextBlock Foreground="{StaticResource PhoneAccentBrush}" 
+                                       Margin="0,0,0,24"
+                                       Text="{Binding Founded}"  />
+                        </StackPanel>
+
+                        <StackPanel Visibility="{Binding Description, Converter={StaticResource EmptyStringToVisibleConverter}}">
+                            <TextBlock Text="description" Style="{StaticResource SubHeader}" />
+                            <TextBlock TextWrapping="Wrap" Text="{Binding Description}"  />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </controls:PivotItem>
+
+            <controls:PivotItem Header="products" x:Name="piProducts" Margin="24,0,12,12">
+                <telerikDataControls:RadJumpList x:Name="jlProducts" Margin="0,18,-12,0" IsStickyHeaderEnabled="True" 
+                                                 EmptyContent="No products available" telerik:InteractionEffectManager.IsInteractionEnabled="True"
+                                                 ItemsSource="{Binding products}"
+                                                 SelectionChanged="jlProducts_SelectionChanged">
+                    <telerikDataControls:RadJumpList.SortDescriptors>
+                        <telerikData:PropertySortDescriptor PropertyName="name" />
+                    </telerikDataControls:RadJumpList.SortDescriptors>
+                    <telerikDataControls:RadJumpList.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <Border Background="{StaticResource PhoneAccentBrush}" Width="64" Height="64" 
+                                    HorizontalAlignment="Left" Margin="0, 4, 0, 4" BorderThickness="0">
+                                <TextBlock FontSize="{StaticResource PhoneFontSizeExtraLarge}" 
+                                           Text="{Binding Key}" 
+                                           Margin="4" 
+                                           VerticalAlignment="Bottom" 
+                                           HorizontalAlignment="Left"/>
+                            </Border>
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.GroupHeaderTemplate>
+                    <telerikDataControls:RadJumpList.GroupPickerItemsPanel>
+                        <ItemsPanelTemplate>
+                            <telerikPrimitives:RadWrapPanel Margin="8,30,0,0" ItemWidth="115" ItemHeight="106"/>
+                        </ItemsPanelTemplate>
+                    </telerikDataControls:RadJumpList.GroupPickerItemsPanel>
+                    <telerikDataControls:RadJumpList.StickyHeaderTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="0" HorizontalAlignment="Stretch" Background="{StaticResource PhoneBackgroundBrush}" Padding="0, 0, 0, 8">
+                                <Border VerticalAlignment="Top" Background="{StaticResource PhoneAccentBrush}" 
+                                        Width="64" Height="64" HorizontalAlignment="Left" Margin="0, 4, 0, 4" 
+                                        BorderThickness="0">
+                                    <TextBlock FontSize="{StaticResource PhoneFontSizeExtraLarge}" 
+                                               Text="{Binding Key}" Margin="4" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                                </Border>
+                            </Border>
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.StickyHeaderTemplate>
+                    <telerikDataControls:RadJumpList.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding name}" TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}" Margin="0,9,0,9" />
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.ItemTemplate>                    
+                </telerikDataControls:RadJumpList>
+            </controls:PivotItem>
+
+            <controls:PivotItem Header="offices" x:Name="piOffices" Margin="24,0,12,12">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <map:Map x:Name="MainMap" Center="{Binding MapCenter}" Margin="-24,0,-24,0" Height="180" Grid.Row="0" CredentialsProvider="AhsvTH5VaSIHTw41j34NQb2cyxhKbawEZWOU-H2rsCRycZ21JkID45oe0k9U0cxm">
+                        <map:Map.Resources>
+                            <DataTemplate x:Key="LogoTemplate">
+                                <map:Pushpin map:MapLayer.Position="{Binding Location}" Content="{Binding Id}" />
+                            </DataTemplate>
+                        </map:Map.Resources>
+                        <map:MapItemsControl ItemsSource="{Binding offices}" ItemTemplate="{StaticResource LogoTemplate}"/>
+                    </map:Map>
+
+                    <telerikPrimitives:RadDataBoundListBox x:Name="lbOffices" Grid.Row="1" 
+                            EmptyContent="No offices available" telerik:InteractionEffectManager.IsInteractionEnabled="True" 
+                            ItemsSource="{Binding offices}" SelectionChanged="lbOffices_SelectionChanged" VerticalAlignment="Stretch">
+                        <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="0, 12, 12, 12">
+                                    <Grid>
+                                        <Rectangle Fill="{StaticResource PhoneContrastBackgroundBrush}" Margin="0, 12, 0, 0" 
+                                                   VerticalAlignment="Top" HorizontalAlignment="Left" 
+                                                   Height="48" Width="48"
+                                                   RenderTransformOrigin="0.5 0.5">
+                                            <Rectangle.OpacityMask>
+                                                <ImageBrush ImageSource="/Images/Location.png"/>
+                                            </Rectangle.OpacityMask>
+                                            <Rectangle.RenderTransform>
+                                                <ScaleTransform ScaleX="1.3" ScaleY="1.3" />
+                                            </Rectangle.RenderTransform>
+                                        </Rectangle>
+                                        <TextBlock Text="{Binding Id}" Foreground="{StaticResource PhoneBackgroundBrush}" FontSize="{StaticResource PhoneFontSizeSmall}"
+                                                   VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0, 12, 0, 0" />
+                                    </Grid>
+
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Summary1}" Style="{StaticResource PhoneTextLargeStyle}" />
+                                        <TextBlock Text="{Binding Summary2}" Style="{StaticResource PhoneTextSmallStyle}" Foreground="{StaticResource PhoneAccentBrush}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                    </telerikPrimitives:RadDataBoundListBox>
+                </Grid>
+            </controls:PivotItem>
+
+            <controls:PivotItem Header="people" x:Name="piPeople" Margin="24,0,12,12">
+                <telerikDataControls:RadJumpList x:Name="jlPeople" Margin="0,0,-12,0" IsStickyHeaderEnabled="True"
+                                                 EmptyContent="No people available" telerik:InteractionEffectManager.IsInteractionEnabled="True"
+                                                 ItemsSource="{Binding relationships}"
+                                                 SelectionChanged="jlPeople_SelectionChanged">
+                    <telerikDataControls:RadJumpList.SortDescriptors>
+                        <telerikData:PropertySortDescriptor PropertyName="FullName" />
+                    </telerikDataControls:RadJumpList.SortDescriptors>
+                    <telerikDataControls:RadJumpList.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <Border Background="{StaticResource PhoneAccentBrush}" Width="64" Height="64" HorizontalAlignment="Left" Margin="4" BorderThickness="0">
+                                <TextBlock FontSize="{StaticResource PhoneFontSizeExtraLarge}" 
+                                           Text="{Binding Key}" Margin="0,4,0,4" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                            </Border>
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.GroupHeaderTemplate>
+                    <telerikDataControls:RadJumpList.GroupPickerItemsPanel>
+                        <ItemsPanelTemplate>
+                            <telerikPrimitives:RadWrapPanel Margin="8,30,0,0" ItemWidth="115" ItemHeight="106"/>
+                        </ItemsPanelTemplate>
+                    </telerikDataControls:RadJumpList.GroupPickerItemsPanel>
+                    <telerikDataControls:RadJumpList.StickyHeaderTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="0" HorizontalAlignment="Stretch" Background="{StaticResource PhoneBackgroundBrush}" Padding="0, 0, 0, 8">
+                                <Border VerticalAlignment="Top" Background="{StaticResource PhoneAccentBrush}" 
+                                        Width="64" Height="64" 
+                                        HorizontalAlignment="Left" Margin="0, 4, 0, 4" BorderThickness="0">
+                                    <TextBlock FontSize="{StaticResource PhoneFontSizeExtraLarge}" FontFamily="{StaticResource PhoneFontFamilyLight}" Text="{Binding Key}" Margin="4" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                                </Border>
+                            </Border>
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.StickyHeaderTemplate>
+                    <telerikDataControls:RadJumpList.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0, 9, 0, 9">
+                                <TextBlock Text="{Binding FullName}" FontFamily="{StaticResource PhoneFontFamilySemiLight}" FontSize="{StaticResource PhoneFontSizeLarge}" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding title}" TextWrapping="Wrap" Foreground="{StaticResource PhoneAccentBrush}" Margin="0, -3,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.ItemTemplate>
+                </telerikDataControls:RadJumpList>
+            </controls:PivotItem>
+
+            <controls:PivotItem Header="companies" x:Name="piCompanies" Margin="24,0,12,12">
+                <telerikPrimitives:RadDataBoundListBox x:Name="lbCompanies" Margin="0,18,-12,0" EmptyContent="No companies available" 
+                                                       telerik:InteractionEffectManager.IsInteractionEnabled="True" 
+                                                       ItemsSource="{Binding relationships}"
+                                                       SelectionChanged="lbCompanies_SelectionChanged">
+                    <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>                                
+                                <StackPanel Margin="0,0,0,10">
+                                    <TextBlock Text="{Binding firm.name}" FontFamily="{StaticResource PhoneFontFamilySemiLight}" FontSize="{StaticResource PhoneFontSizeLarge}" TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding title}" TextWrapping="Wrap" Foreground="{StaticResource PhoneAccentBrush}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                </telerikPrimitives:RadDataBoundListBox>
+            </controls:PivotItem>
+
+            <controls:PivotItem Header="degrees" x:Name="piDegrees" Margin="24,0,12,12">
+                <telerikPrimitives:RadDataBoundListBox x:Name="lbDegrees" Margin="0,18,-12,0" EmptyContent="No degrees available" 
+                                                       telerik:InteractionEffectManager.IsInteractionEnabled="True" 
+                                                       ItemsSource="{Binding degrees}">
+                    <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,0,0,10">
+                                <TextBlock Text="{Binding InstitutionFull}" FontFamily="{StaticResource PhoneFontFamilySemiLight}" FontSize="{StaticResource PhoneFontSizeLarge}" TextWrapping="Wrap"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding subject}" TextWrapping="Wrap" Grid.Column="0" Foreground="{StaticResource PhoneAccentBrush}"/>
+                                    <TextBlock Text="{Binding GraduatedDate}" HorizontalAlignment="Right" Grid.Column="1" />
+                                </Grid>
+                            </StackPanel>
+                        </DataTemplate>
+                    </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                </telerikPrimitives:RadDataBoundListBox>
+            </controls:PivotItem>
+
+            <controls:PivotItem Header="providerships" x:Name="piServiceProviderships" Margin="24,0,12,12">
+                <telerikDataControls:RadJumpList x:Name="jlServiceProviders" Margin="0,0,-12,0" IsStickyHeaderEnabled="True"
+                                                 EmptyContent="No providers available" telerik:InteractionEffectManager.IsInteractionEnabled="True"
+                                                 ItemsSource="{Binding providerships}"
+                                                 SelectionChanged="jlServiceProviders_SelectionChanged">
+                    <!--<telerikDataControls:RadJumpList.SortDescriptors>
+                        <telerikData:PropertySortDescriptor PropertyName="Name" />
+                    </telerikDataControls:RadJumpList.SortDescriptors>-->
+                    <telerikDataControls:RadJumpList.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <Border Background="{StaticResource PhoneAccentBrush}" Width="64" Height="64" HorizontalAlignment="Left" Margin="4" BorderThickness="0">
+                                <TextBlock FontSize="{StaticResource PhoneFontSizeExtraLarge}" FontFamily="{StaticResource PhoneFontFamilyLight}" Text="{Binding Key}" Margin="4" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                            </Border>
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.GroupHeaderTemplate>
+                    <telerikDataControls:RadJumpList.GroupPickerItemsPanel>
+                        <ItemsPanelTemplate>
+                            <telerikPrimitives:RadWrapPanel Margin="8,30,0,0" ItemWidth="115" ItemHeight="106"/>
+                        </ItemsPanelTemplate>
+                    </telerikDataControls:RadJumpList.GroupPickerItemsPanel>
+                    <telerikDataControls:RadJumpList.StickyHeaderTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="0" HorizontalAlignment="Stretch" Background="{StaticResource PhoneBackgroundBrush}" Padding="0, 0, 0, 8">
+                                <Border VerticalAlignment="Top" Background="{StaticResource PhoneAccentBrush}" Width="64" Height="64" HorizontalAlignment="Left" Margin="4, 4, 4, 4" BorderThickness="0">
+                                    <TextBlock FontSize="{StaticResource PhoneFontSizeExtraLarge}" FontFamily="{StaticResource PhoneFontFamilyLight}" Text="{Binding Key}" Margin="4" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                                </Border>
+                            </Border>
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.StickyHeaderTemplate>
+                    <telerikDataControls:RadJumpList.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,0,0,10" Grid.Column="1">
+                                <TextBlock Text="{Binding firm.name}" FontFamily="{StaticResource PhoneFontFamilySemiLight}" FontSize="{StaticResource PhoneFontSizeLarge}" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding title}" TextWrapping="Wrap" Foreground="{StaticResource PhoneAccentBrush}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.ItemTemplate>                    
+                </telerikDataControls:RadJumpList>
+            </controls:PivotItem>
+
+            <controls:PivotItem Header="providerships" x:Name="piFinOrgProviderships" Margin="24,0,12,12">
+                <telerikDataControls:RadJumpList x:Name="jlFinOrgProviders" Margin="0,0,-12,0" IsStickyHeaderEnabled="True"
+                                                 EmptyContent="No providers available" telerik:InteractionEffectManager.IsInteractionEnabled="True"
+                                                 ItemsSource="{Binding providerships}"
+                                                 SelectionChanged="jlFinOrgProviders_SelectionChanged">
+                    <!--<telerikDataControls:RadJumpList.SortDescriptors>
+                        <telerikData:PropertySortDescriptor PropertyName="Name" />
+                    </telerikDataControls:RadJumpList.SortDescriptors>-->
+                    <telerikDataControls:RadJumpList.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <Border Background="{StaticResource PhoneAccentBrush}" Width="64" Height="64" HorizontalAlignment="Left" Margin="4" BorderThickness="0">
+                                <TextBlock FontSize="{StaticResource PhoneFontSizeExtraLarge}" FontFamily="{StaticResource PhoneFontFamilyLight}" Text="{Binding Key}" Margin="4" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                            </Border>
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.GroupHeaderTemplate>
+                    <telerikDataControls:RadJumpList.GroupPickerItemsPanel>
+                        <ItemsPanelTemplate>
+                            <telerikPrimitives:RadWrapPanel Margin="8,30,0,0" ItemWidth="115" ItemHeight="106"/>
+                        </ItemsPanelTemplate>
+                    </telerikDataControls:RadJumpList.GroupPickerItemsPanel>
+                    <telerikDataControls:RadJumpList.StickyHeaderTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="0" HorizontalAlignment="Stretch" Background="{StaticResource PhoneBackgroundBrush}" Padding="0, 0, 0, 8">
+                                <Border VerticalAlignment="Top" Background="{StaticResource PhoneAccentBrush}" Width="64" Height="64" HorizontalAlignment="Left" Margin="4, 4, 4, 4" BorderThickness="0">
+                                    <TextBlock FontSize="{StaticResource PhoneFontSizeExtraLarge}" FontFamily="{StaticResource PhoneFontFamilyLight}" Text="{Binding Key}" Margin="4" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                                </Border>
+                            </Border>
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.StickyHeaderTemplate>
+                    <telerikDataControls:RadJumpList.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,0,0,10" Grid.Column="1">
+                                <TextBlock Text="{Binding provider.name}" FontFamily="{StaticResource PhoneFontFamilySemiLight}" FontSize="{StaticResource PhoneFontSizeLarge}" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding title}" TextWrapping="Wrap" Foreground="{StaticResource PhoneAccentBrush}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.ItemTemplate>
+                </telerikDataControls:RadJumpList>
+            </controls:PivotItem>
+
+            <controls:PivotItem Header="investments" x:Name="piInvestments" Margin="24,0,12,12">
+                <telerikDataControls:RadJumpList x:Name="jlInvestments" Margin="0,0,-12,0" IsStickyHeaderEnabled="True"
+                                                 EmptyContent="No investments available" telerik:InteractionEffectManager.IsInteractionEnabled="True"
+                                                 ItemsSource="{Binding investments}">
+                    <telerikDataControls:RadJumpList.SortDescriptors>
+                        <telerikData:PropertySortDescriptor PropertyName="Year" SortMode="Descending" />
+                        <telerikData:PropertySortDescriptor PropertyName="Month" SortMode="Descending" />
+                        <telerikData:PropertySortDescriptor PropertyName="Day" SortMode="Descending" />
+                    </telerikDataControls:RadJumpList.SortDescriptors>
+                    <telerikDataControls:RadJumpList.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <Border Background="{StaticResource PhoneAccentBrush}" Width="64" Height="64" HorizontalAlignment="Left" Margin="4" BorderThickness="0">
+                                <TextBlock FontSize="{StaticResource PhoneFontSizeExtraLarge}" FontFamily="{StaticResource PhoneFontFamilyLight}" Text="{Binding Key}" Margin="4" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                            </Border>
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.GroupHeaderTemplate>
+                    <telerikDataControls:RadJumpList.GroupPickerItemsPanel>
+                        <ItemsPanelTemplate>
+                            <telerikPrimitives:RadWrapPanel Margin="8,30,0,0" ItemWidth="115" ItemHeight="106"/>
+                        </ItemsPanelTemplate>
+                    </telerikDataControls:RadJumpList.GroupPickerItemsPanel>
+                    <telerikDataControls:RadJumpList.StickyHeaderTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="0" HorizontalAlignment="Stretch" Background="{StaticResource PhoneBackgroundBrush}" Padding="0, 0, 0, 8">
+                                <Border VerticalAlignment="Top" Background="{StaticResource PhoneAccentBrush}" Width="64" Height="64" HorizontalAlignment="Left" Margin="4, 4, 4, 4" BorderThickness="0">
+                                    <TextBlock FontSize="{StaticResource PhoneFontSizeExtraLarge}" FontFamily="{StaticResource PhoneFontFamilyLight}" Text="{Binding Key}" Margin="4" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                                </Border>
+                            </Border>
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.StickyHeaderTemplate>
+                    <telerikDataControls:RadJumpList.ItemTemplate>
+                        <DataTemplate>
+                            <!--<Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>-->
+                            <!--<Image Stretch="None" Height="48" Width="48" VerticalAlignment="Top"
+                                       Source="{Binding Converter={StaticResource ThemedImageConverter}, ConverterParameter={StaticResource PhoneBackgroundColor}}"
+                                       DataContext="/DevRainSolutions.Crunchbase;component/Images/Namespace/{0}/company.png" />-->
+                            <StackPanel Margin="0,0,0,10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding funding_round.company.name}" Grid.Column="0" FontFamily="{StaticResource PhoneFontFamilySemiLight}" FontSize="{StaticResource PhoneFontSizeLarge}" TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding funding_round.InvestmentDate}" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,15,0"/>
+                                </Grid>
+                                <TextBlock Text="{Binding funding_round.source_description}" TextWrapping="Wrap" Foreground="{StaticResource PhoneAccentBrush}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.ItemTemplate>
+                    <!--<i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <Command:EventToCommand Command="{Binding SubPersonSelectionChanged, Mode=OneTime}"   
+														PassEventArgsToCommand="True"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>-->
+                </telerikDataControls:RadJumpList>
+            </controls:PivotItem>
+
+            <controls:PivotItem Header="funds" x:Name="piFunds" Margin="24,0,12,12">
+                <telerikDataControls:RadJumpList x:Name="jlFunds" Margin="0,0,-12,0" IsStickyHeaderEnabled="True"
+                                                 EmptyContent="No funds available" telerik:InteractionEffectManager.IsInteractionEnabled="True"
+                                                 ItemsSource="{Binding funds}">
+                    <telerikDataControls:RadJumpList.SortDescriptors>
+                        <telerikData:PropertySortDescriptor PropertyName="funded_year" SortMode="Descending" />
+                        <telerikData:PropertySortDescriptor PropertyName="funded_month" SortMode="Descending" />
+                        <telerikData:PropertySortDescriptor PropertyName="funded_day" SortMode="Descending" />
+                    </telerikDataControls:RadJumpList.SortDescriptors>
+                    <telerikDataControls:RadJumpList.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <Border Background="{StaticResource PhoneAccentBrush}" Width="64" Height="64" HorizontalAlignment="Left" Margin="4" BorderThickness="0">
+                                <TextBlock FontSize="{StaticResource PhoneFontSizeExtraLarge}" FontFamily="{StaticResource PhoneFontFamilyLight}" Text="{Binding Key}" Margin="4" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                            </Border>
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.GroupHeaderTemplate>
+                    <telerikDataControls:RadJumpList.GroupPickerItemsPanel>
+                        <ItemsPanelTemplate>
+                            <telerikPrimitives:RadWrapPanel Margin="8,30,0,0" ItemWidth="115" ItemHeight="106"/>
+                        </ItemsPanelTemplate>
+                    </telerikDataControls:RadJumpList.GroupPickerItemsPanel>
+                    <telerikDataControls:RadJumpList.StickyHeaderTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="0" HorizontalAlignment="Stretch" Background="{StaticResource PhoneBackgroundBrush}" Padding="0, 0, 0, 8">
+                                <Border VerticalAlignment="Top" Background="{StaticResource PhoneAccentBrush}" Width="64" Height="64" HorizontalAlignment="Left" Margin="4, 4, 4, 4" BorderThickness="0">
+                                    <TextBlock FontSize="{StaticResource PhoneFontSizeExtraLarge}" FontFamily="{StaticResource PhoneFontFamilyLight}" Text="{Binding Key}" Margin="4" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                                </Border>
+                            </Border>
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.StickyHeaderTemplate>
+                    <telerikDataControls:RadJumpList.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <!--<Image Stretch="None" Height="48" Width="48" VerticalAlignment="Top"
+                                       Source="{Binding Converter={StaticResource ThemedImageConverter}, ConverterParameter={StaticResource PhoneBackgroundColor}}"
+                                       DataContext="/DevRainSolutions.Crunchbase;component/Images/Namespace/{0}/company.png" />-->
+                                <StackPanel Margin="0,0,0,10" Grid.Column="1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding name}" Grid.Column="0" FontFamily="{StaticResource PhoneFontFamilySemiLight}" FontSize="{StaticResource PhoneFontSizeLarge}" TextWrapping="Wrap"/>
+                                        <TextBlock Text="{Binding FundDate}" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,15,0"/>
+                                    </Grid>
+                                    <TextBlock Text="{Binding source_description}" TextWrapping="Wrap" Foreground="{StaticResource PhoneAccentBrush}"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </telerikDataControls:RadJumpList.ItemTemplate>
+                    <!--<i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <Command:EventToCommand Command="{Binding SubPersonSelectionChanged, Mode=OneTime}"   
+														PassEventArgsToCommand="True"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>-->
+                </telerikDataControls:RadJumpList>
+            </controls:PivotItem>
+
+            <controls:PivotItem Header="milestones" x:Name="piMilestones" Margin="24,0,12,12">
+                <telerikPrimitives:RadDataBoundListBox x:Name="lbMilestones" Margin="0,0,-12,0" EmptyContent="No milestones available" 
+                                                       telerik:InteractionEffectManager.IsInteractionEnabled="True"
+                                                       ItemsSource="{Binding milestones}"
+                                                       SelectionChanged="lbMilestones_SelectionChanged">
+                    <telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Rectangle Width="3" Fill="{StaticResource PhoneAccentBrush}" VerticalAlignment="Stretch" />
+                                <Ellipse Height="20" Width="20" Fill="{StaticResource PhoneAccentBrush}" VerticalAlignment="Top" />
+                                <StackPanel Grid.Column="1" Margin="10,-5,10,15">
+                                    <TextBlock Text="{Binding MilestoneDate}" Foreground="{StaticResource PhoneAccentBrush}" FontStyle="Italic" />
+                                    <TextBlock Text="{Binding description}" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </telerikPrimitives:RadDataBoundListBox.ItemTemplate>
+                </telerikPrimitives:RadDataBoundListBox>
+            </controls:PivotItem>
+        </controls:Pivot>
+        <adduplex:AdControl Grid.Row="1" x:Name="adDuplexAd" AppId="36863" />
+        
+        <!--<Preview:BindableApplicationBar x:Name="AppBar" BarOpacity="1.0" Mode="Minimized" >
+            <Preview:BindableApplicationBar.MenuItems>
+                <Preview:BindableApplicationBarMenuItem  Text="update information" 
+													 Command="{Binding UpdateInformationCommand}" />
+            </Preview:BindableApplicationBar.MenuItems>
+        </Preview:BindableApplicationBar>-->
+    </Grid>
+</phone:PhoneApplicationPage>
